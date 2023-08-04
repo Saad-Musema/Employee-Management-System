@@ -265,6 +265,28 @@ void display_all_employees(fstream& File){
     File.close();
 }
 
+double calculate_salary(employee teacher ,fstream& File) {
+
+int ID;
+cout<<"Enter the employee ID :";
+    cin>>ID;
+    int hoursWorked;
+    int weeklyHours;
+    cout << "Enter working hours weekly : ";
+    cin>>weeklyHours;
+    teacher.working_hours = 4* weeklyHours;
+    int totalworked;
+    for(int i=0; i<4; i++){
+        cout<<"How many hours did you work in week "<<i+1<<" ?";
+        cin>>hoursWorked;
+        totalworked += hoursWorked;
+    }
+             double paymentPerHour = 500.0;
+  double salary = paymentPerHour * totalworked;
+  cout<<"The salary of "<< teacher.Fname << " "<< teacher.Lname<<" is: "<<salary<<" birr";
+       return 0;
+       }
+
 void evaluate_performance(employee teacher, fstream& File) {
 int ID;
 cout<<"Enter the employee ID :";

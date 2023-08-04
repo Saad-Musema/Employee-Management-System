@@ -157,3 +157,45 @@ employee teacher;
     File.close();
 }
 
+void search_teacher(fstream& File) {
+    int ID,count=0;
+    cout<<"Enter the employee ID you want to search:";
+    cin>>ID;
+    employee teacher;
+    employee teachers[10];
+    File.open("teachers.txt",ios::in);
+    File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>> teacher.gender
+               >> teacher.phone_number >> teacher.email >> teacher.employment_history
+              >> teacher.qualifications >> teacher.experience >> teacher.course >> teacher.roles;
+
+    while(!File.eof())
+        {
+        if (teacher.employee_ID == ID) {
+            cout << "Teacher Found:\n";
+            cout << "Employee ID: " << teacher.employee_ID << endl;
+            cout << "Name: " << teacher.Fname << " "<< teacher.Lname<< endl;
+            cout << "Age: " << teacher.age << endl;
+            cout << "Gender: " << teacher.gender << endl;
+          cout << "Phone number: " << teacher.phone_number << endl;
+            cout << "Email Address: " << teacher.email << endl;
+            cout << "Joining Date: " << teacher.employment_history << endl;
+            cout << "Qualification: " << teacher.qualifications << endl;
+            cout << "Experience: " << teacher.experience << endl;
+            cout << "Department: " << teacher.course << endl;
+            cout << "Role in their department: " << teacher.roles << endl;
+           count++;
+
+            }
+
+
+            File.clear();
+            File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>>teacher.gender>>teacher.email>>teacher.employment_history>>teacher.qualifications>>
+            teacher.experience>>teacher.course>>teacher.roles;
+    }
+
+     if (count == 0) {
+        cout << "Teacher with Employee ID " << ID << " not found.\n";
+    }
+}
+
+

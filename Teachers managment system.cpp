@@ -232,6 +232,38 @@ void search_teacher(fstream& File) {
         cout << "Employee record deleted successfully!" << endl;
 }
 
+void display_all_employees(fstream& File){
+    int count=0;
+    employee teacher;
+    employee teachers[10];
+    File.open("teachers.txt",ios::in);
+    if (File.is_open())
+        cout<<"**.\n";
+    else
+        cout<<"Unable to open a file.";
+    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
+    cout<<"EMPID"<<"\t\tFIRST-NAME"<<"\t\tLAST-NAME"<<"\t\tAGE"<<"\t\tGENDER"<<"\t\tSALARY"<<"\t\tEXPERIENCE  ";
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------------\n";
+    File.seekg(0,ios::beg);
+    File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>>teacher.gender>>teacher.phone_number>>teacher.email>>teacher.employment_history>>teacher.qualifications>>teacher.experience>>teacher.course>>teacher.roles;
+    while(!File.eof())
+        {
+        teachers[count]=teacher;
+        File.clear();
+        count++;
+        File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>>teacher.gender>>teacher.phone_number>>teacher.email>>teacher.employment_history>>teacher.qualifications
+        >>teacher.experience>>teacher.course>>teacher.roles;
+
+        }
+    for(int i=0;i<count;i++)
+    {
+        cout<<teachers[i].employee_ID<<setw(15)<<"\t"<<teachers[i].Fname<<setw(15)<<"\t"<<teachers[i].Lname<<setw(13)<<"\t"<<teachers[i].age<<setw(13)<<"\t"<<teachers[i].gender<<setw(13)<<"\t";
+        cout<<teachers[i].phone_number<<setw(11)<<"\t"<<teachers[i].email<<"\t"<<teachers[i].employment_history<<"\t"<<teachers[i].qualifications<<"\t"<<teachers[i].experience<<"\t"<<teachers[i].course<<"\t"<<teachers[i].roles;
+        cout<<"\n-----------------------------------------------------------------------------------------------------------------------------";
+        cout<<endl;
+    }
+    File.close();
+}
 
 void evaluate_performance(employee teacher, fstream& File) {
 int ID;

@@ -199,3 +199,30 @@ void search_teacher(fstream& File) {
 }
 
 
+void evaluate_performance(employee teacher, fstream& File) {
+int ID;
+cout<<"Enter the employee ID :";
+    cin>>ID;
+    int hoursWorked;
+    int weeklyHours;
+    cout << "Enter working hours weekly : ";
+    cin>>weeklyHours;
+    teacher.working_hours = 4* weeklyHours;
+    int totalworked;
+    for(int i=0; i<4; i++){
+        cout<<"How many hours did you work in week "<<i+1<<" ?";
+        cin>>hoursWorked;
+        totalworked += hoursWorked;}
+            if (totalworked == teacher.working_hours) {
+        cout << "Excellent performance\n";
+    } else if (totalworked >= (0.75 * teacher.working_hours)) {
+        cout << "Good performance\n";
+    } else if (totalworked >= (0.50 * teacher.working_hours)) {
+        cout << "Bad performance\n";
+    } else if (totalworked >= 0) {
+        cout << "Very bad performance\n";
+    } else {
+        cout << "Invalid input\n";
+    }
+}
+

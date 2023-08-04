@@ -157,6 +157,7 @@ employee teacher;
     File.close();
 }
 
+//Searching for Employee ID Function
 void search_teacher(fstream& File) {
     int ID,count=0;
     cout<<"Enter the employee ID you want to search:";
@@ -198,6 +199,8 @@ void search_teacher(fstream& File) {
     }
 }
 
+
+//Deleting Employee Data Function
  void delete_employee(fstream& File)
     {
         int ID, count = 0;
@@ -232,6 +235,7 @@ void search_teacher(fstream& File) {
         cout << "Employee record deleted successfully!" << endl;
 }
 
+//Displaying all Employees Data
 void display_all_employees(fstream& File){
     int count=0;
     employee teacher;
@@ -265,6 +269,7 @@ void display_all_employees(fstream& File){
     File.close();
 }
 
+//Calculating Employee Data
 double calculate_salary(employee teacher ,fstream& File) {
 
 int ID;
@@ -287,6 +292,7 @@ cout<<"Enter the employee ID :";
        return 0;
        }
 
+    //Evaluating Performance of employees based on worked hours
 void evaluate_performance(employee teacher, fstream& File) {
 int ID;
 cout<<"Enter the employee ID :";

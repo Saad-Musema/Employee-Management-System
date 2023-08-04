@@ -198,6 +198,40 @@ void search_teacher(fstream& File) {
     }
 }
 
+ void delete_employee(fstream& File)
+    {
+        int ID, count = 0;
+    cout << "DELETE TEACHER" << endl;
+    cout << "Enter Teacher's ID you want to delete: ";
+    cin >> ID;
+    employee teacher;
+
+    File.open("teachers.txt", ios::in);
+    ofstream tempfile;
+    tempfile.open("temporary.txt", ios::out);
+
+    while (
+           File >> teacher.employee_ID >> teacher.Fname >> teacher.Lname >> teacher.age >> teacher.gender >> teacher.phone_number >> teacher.email >> teacher.experience >> teacher.employment_history >> teacher.qualifications >> teacher.course >> teacher.roles)
+    {
+        if (teacher.employee_ID != ID) {
+            tempfile << teacher.employee_ID << " " << teacher.Fname << " " << teacher.Lname << " " << teacher.age << " " << teacher.gender << " " << teacher.phone_number << " " << teacher.email << " " << teacher.experience << " " << teacher.employment_history << " " << teacher.qualifications << " " << teacher.course << " " << teacher.roles << endl;
+
+        }else
+        count++;
+    }
+
+    File.close();
+    tempfile.close();
+    remove("teachers.txt");
+    rename("temporary.txt", "teachers.txt");
+
+    if (count == 0) {
+       cout << "Employee record not found!" << endl;
+
+    } else
+        cout << "Employee record deleted successfully!" << endl;
+}
+
 
 void evaluate_performance(employee teacher, fstream& File) {
 int ID;

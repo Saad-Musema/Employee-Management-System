@@ -8,7 +8,7 @@
 
 using namespace std;
 
-struct employee {
+struct Employee {
     int employee_ID;
     char Fname[10];
     char Lname[10];
@@ -16,217 +16,236 @@ struct employee {
     string gender;
     string phone_number;
     string email;
-    string employment_history; // joining day
-    string qualifications; // their education level
+    string employment_history;
+    string qualifications;
     int experience;
-    string course; // what course they are teaching
-    string roles; // what position do they have in their department
-int  working_hours;
-};
-// Function prototypes
-void add_employee( employee teacher ,fstream& File);
-void delete_employee(fstream& File);
-double calculate_salary(employee teacher , fstream& File);
-void evaluate_performance(employee teacher ,fstream& File) ;
-void display_all_employees(fstream& File);
-void search_teacher(fstream& File) ;
+    string course;
+    string roles;
+    int working_hours;
+}emp;
 
-int main()
+fstream file;
+
+void employee_insert(Employee &emp) {
+    system("cls");
+    cout<<"\t\t\tEnter ID: ";
+    cin>>emp.employee_ID;
+    cout << "\t\t\tEnter First Name: ";
+    cin >> emp.Fname;
+    cout << "\t\t\tEnter Last Name: ";
+    cin >> emp.Lname;
+    cout << "\t\t\tEnter Age: ";
+    cin >> emp.age;
+    cout << "\t\t\tEnter Gender: ";
+    cin >> emp.gender;
+    cout << "\t\t\tEnter Phone Number: ";
+    cin >> emp.phone_number;
+    cout << "\t\t\tEnter Email: ";
+    cin >> emp.email;
+    cout << "\t\t\tEnter Employment History: ";
+    cin >> emp.employment_history;
+    cout << "\t\t\tEnter Qualifications: ";
+    cin >> emp.qualifications;
+    cout << "\t\t\tEnter Experience: ";
+    cin >> emp.experience;
+    cout << "\t\t\tEnter Course: ";
+    cin >> emp.course;
+    cout << "\t\t\tEnter Roles: ";
+    cin >> emp.roles;
+    cout << "\t\t\tEnter Working Hours: ";
+    cin >> emp.working_hours;
+
+    file.open("employeeRecord.txt", ios::app | ios::out);
+    file << emp.employee_ID << " " << emp.Fname << " " << emp.Lname << " " << emp.age << " " << emp.gender << " " << emp.phone_number << " " << emp.email << " " << emp.employment_history << " " << emp.qualifications << " " << emp.experience << " " << emp.course << " " << emp.roles << " " << emp.working_hours << "\n";
+    file.close();
+}
+
+void employee_display(Employee &emp) {
+    system("cls");
+    fstream file;
+    int total = 1;
+
+    cout << "\n-------------------------------------------------------------------------------------------------------" << endl;
+    cout << "------------------------------------- Employee Record Table --------------------------------------------" << endl;
+
+    file.open("employeeRecord.txt", ios::in);
+
+    if (!file) {
+        cout << "\n\t\t\tNo Data is Present... ";
+        file.close();
+    } else {
+        while (file >> emp.employee_ID >> emp.Fname >> emp.Lname >> emp.age >> emp.gender >> emp.phone_number >> emp.email >> emp.employment_history >> emp.qualifications >> emp.experience >> emp.course >> emp.roles >> emp.working_hours) {
+            cout << "\n\n\t\t\tEmployee No.: " << total++ << endl;
+            cout << "\t\t\tID: " << emp.employee_ID << "\n";
+            cout << "\t\t\tFirst Name: " << emp.Fname << "\n";
+            cout << "\t\t\tLast Name: " << emp.Lname << "\n";
+            cout << "\t\t\tAge: " << emp.age << "\n";
+            cout << "\t\t\tGender: " << emp.gender << "\n";
+            cout << "\t\t\tPhone Number: " << emp.phone_number << "\n";
+            cout << "\t\t\tEmail: " << emp.email << "\n";
+            cout << "\t\t\tEmployment History: " << emp.employment_history << "\n";
+            cout << "\t\t\tQualifications: " << emp.qualifications << "\n";
+            cout << "\t\t\tExperience: " << emp.experience << "\n";
+            cout << "\t\t\tCourse: " << emp.course << "\n";
+            cout << "\t\t\tRoles: " << emp.roles << "\n";
+            cout << "\t\t\tWorking Hours: " << emp.working_hours << "\n";
+        }
+
+        if (total == 1) {
+            cout << "\n\t\t\tNo Data is Present..." << endl;
+        }
+    }
+
+    file.close();
+}
+
+
+void employee_modify(Employee emp) {
+
 {
-   fstream File;
-    int choice;
-    struct employee teacher;
-do{
-    cout << "----- Teachers Management System -----\n";
-    cout << "1. Add Employee\n";
-    cout << "2. Delete Employee\n";
-    cout << "3. Search Employee\n";
-    cout << "4. Calculate Salary\n";
-    cout << "5. Evaluate Performance\n";
-    cout << "6. Display All Employees\n";
-    cout << "0. Exit\n";
-    cout<<"-------------------------------------------\n";
-    cout << "Enter your choice: ";
-    cin >> choice;
+    system("cls");
+    fstream file, file1;
+    int employeeID;
+    int found = 0;
 
-    switch (choice)
+    cout << "\n-------------------------------------------------------------------------------------------------------" << endl;
+    cout << "------------------------------------- Employee Modify Details ----------------------------------------" << endl;
+
+    file.open("employeeRecord.txt", ios::in);
+    if (!file)
     {
-    case 1:
-
-        add_employee(teacher ,File);
-        break;
-
-    case 2:
-        delete_employee(File);
-        break;
-
-    case 3:
-    search_teacher( File);
-        break;
-
-    case 4:
-        calculate_salary(teacher,File);
-        break;
-
-    case 5:
-        evaluate_performance(teacher,File);
-        break;
-
-    case 6:
-
-    display_all_employees(File);
-
-        break;
-    case 0:
-        cout << "Exiting the program.\n";
-        break;
-    default:
-        cout << "Invalid choice. Please try again.\n";
-        break;
+        cout << "\n\t\t\tNo Data is Present..";
+        file.close();
     }
-    cout<<"enter any key to go back";
-    cin.ignore();
-    cin.get();
-} while(choice!=0);
-    return 0;
-}
+    else
+    {
+        cout << "\nEnter Employee ID which you want to Modify: ";
+        cin >> employeeID;
+        file1.open("temp.txt", ios::app | ios::out);
 
-// Function to add a new employee record
-void add_employee(employee teachers, fstream& File) {
-
-    cout << "PLEASE FILL IN THE TEACHERS DATA.\n";
-    File.open("teachers.txt", ios::out | ios::app);
-    if (File.fail()) {
-        cout << "Input file opening failed.\n";
-        exit(1);
-    }
-employee teacher;
-    // Input employee details
-    cout << "Employee ID: ";
-    cin >> teacher.employee_ID;
-    File << teacher.employee_ID << " ";
-
-    cout << "First Name: ";
-     cin>>teacher.Fname;
-    File << teacher.Fname << " ";
-
-    cout << "Last Name: ";
-     cin>>teacher.Lname;
-    File << teacher.Lname << " ";
-
-    cout << "Age: ";
-    cin >> teacher.age;
-    File << teacher.age << " ";
-
-    cout << "Gender: ";
-    cin.ignore();
-    getline(cin, teacher.gender);
-    File << teacher.gender << " ";
-
-    cout << "Phone number: ";
-    getline(cin, teacher.phone_number);
-    File << teacher.phone_number << " ";
-
-    cout << "Email Address: ";
-    getline(cin, teacher.email);
-    File << teacher.email << " ";
-
-    cout << "Joining Date: ";
-    getline(cin, teacher.employment_history);
-    File << teacher.employment_history << " ";
-
-    cout << "Qualification: ";
-    getline(cin, teacher.qualifications);
-    File << teacher.qualifications << " ";
-
-    cout << "Experience: ";
-    cin >> teacher.experience;
-    File << teacher.experience << " ";
-
-    cout << "Department: ";
-    cin.ignore();
-    getline(cin, teacher.course);
-    File << teacher.course << " ";
-
-    cout << "Role in their department: ";
-    getline(cin, teacher.roles);
-    File << teacher.roles << " ";
-
-    File << endl;
-    File.clear();
-    File.close();
-}
-
-//Searching for Employee ID Function
-void search_teacher(fstream& File) {
-    int ID,count=0;
-    cout<<"Enter the employee ID you want to search:";
-    cin>>ID;
-    employee teacher;
-    employee teachers[10];
-    File.open("teachers.txt",ios::in);
-    File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>> teacher.gender
-               >> teacher.phone_number >> teacher.email >> teacher.employment_history
-              >> teacher.qualifications >> teacher.experience >> teacher.course >> teacher.roles;
-
-    while(!File.eof())
+        while (file >> emp.employee_ID >> emp.Fname >> emp.Lname >> emp.age >> emp.gender >> emp.phone_number >> emp.email >> emp.employment_history >> emp.qualifications >> emp.experience >> emp.course >> emp.roles >> emp.working_hours)
         {
-        if (teacher.employee_ID == ID) {
-            cout << "Teacher Found:\n";
-            cout << "Employee ID: " << teacher.employee_ID << endl;
-            cout << "Name: " << teacher.Fname << " "<< teacher.Lname<< endl;
-            cout << "Age: " << teacher.age << endl;
-            cout << "Gender: " << teacher.gender << endl;
-          cout << "Phone number: " << teacher.phone_number << endl;
-            cout << "Email Address: " << teacher.email << endl;
-            cout << "Joining Date: " << teacher.employment_history << endl;
-            cout << "Qualification: " << teacher.qualifications << endl;
-            cout << "Experience: " << teacher.experience << endl;
-            cout << "Department: " << teacher.course << endl;
-            cout << "Role in their department: " << teacher.roles << endl;
-           count++;
-
+            if (employeeID != emp.employee_ID)
+            {
+                file1 << " " << emp.employee_ID << " " << emp.Fname << " " << emp.Lname << " " << emp.age << " " << emp.gender << " " << emp.phone_number << " " << emp.email << " " << emp.employment_history << " " << emp.qualifications << " " << emp.experience << " " << emp.course << " " << emp.roles << " " << emp.working_hours << "\n";
             }
+            else
+            {
+                cout << "\n-------------------------------------------------------------------------------------------------------" << endl;
+                cout << "------------------------------------- Modify Employee Details ----------------------------------------" << endl;
+                cout << "\t\t\tEnter First Name: ";
+                cin >> emp.Fname;
+                cout << "\t\t\tEnter Last Name: ";
+                cin >> emp.Lname;
+                cout << "\t\t\tEnter Age: ";
+                cin >> emp.age;
+                cout << "\t\t\tEnter Gender: ";
+                cin >> emp.gender;
+                cout << "\t\t\tEnter Phone Number: ";
+                cin >> emp.phone_number;
+                cout << "\t\t\tEnter Email: ";
+                cin >> emp.email;
+                cout << "\t\t\tEnter Employment History: ";
+                cin >> emp.employment_history;
+                cout << "\t\t\tEnter Qualifications: ";
+                cin >> emp.qualifications;
+                cout << "\t\t\tEnter Experience: ";
+                cin >> emp.experience;
+                cout << "\t\t\tEnter Course: ";
+                cin >> emp.course;
+                cout << "\t\t\tEnter Roles: ";
+                cin >> emp.roles;
+                cout << "\t\t\tEnter Working Hours: ";
+                cin >> emp.working_hours;
 
+                file1 << " " << emp.employee_ID << " " << emp.Fname << " " << emp.Lname << " " << emp.age << " " << emp.gender << " " << emp.phone_number << " " << emp.email << " " << emp.employment_history << " " << emp.qualifications << " " << emp.experience << " " << emp.course << " " << emp.roles << " " << emp.working_hours << "\n";
+                found++;
+            }
+        }
 
-            File.clear();
-            File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>>teacher.gender>>teacher.email>>teacher.employment_history>>teacher.qualifications>>
-            teacher.experience>>teacher.course>>teacher.roles;
+        file.close();
+        file1.close();
+
+        if (found == 0)
+        {
+            cout << "\n\n\t\t\t Employee ID Not Found....";
+        }
+
+        remove("employeeRecord.txt");
+        rename("temp.txt", "employeeRecord.txt");
     }
-
-     if (count == 0) {
-        cout << "Teacher with Employee ID " << ID << " not found.\n";
-    }
+}
 }
 
 
-//Deleting Employee Data Function
- void delete_employee(fstream& File)
+void employee_search(Employee &emp) {
+    system("cls");
+    fstream file;
+    file.open("employeeRecord.txt", ios::in);
+
+    if (!file) {
+        cout << "\n-------------------------------------------------------------------------------------------------------" << endl;
+        cout << "------------------------------------- Employee Search Data --------------------------------------------" << endl;
+        cout << "\n\t\t\tNo Data is Present... " << endl;
+    } else {
+        int found = 0;
+        int employeeID;
+
+        cout << "\n-------------------------------------------------------------------------------------------------------" << endl;
+        cout << "------------------------------------- Employee Search Table --------------------------------------------" << endl;
+        cout << "\nEnter Employee ID of Employee you want to search: ";
+        cin >> employeeID;
+
+        while (file >> emp.employee_ID >> emp.Fname >> emp.Lname >> emp.age >> emp.gender >> emp.phone_number >> emp.email >> emp.employment_history >> emp.qualifications >> emp.experience >> emp.course >> emp.roles >> emp.working_hours) {
+            if (employeeID == emp.employee_ID) {
+                cout << "\n\t\t\tEmployee ID: " << emp.employee_ID << "\n";
+                cout << "\t\t\tFirst Name: " << emp.Fname << "\n";
+                cout << "\t\t\tLast Name: " << emp.Lname << "\n";
+                cout << "\t\t\tAge: " << emp.age << "\n";
+                cout << "\t\t\tGender: " << emp.gender << "\n";
+                cout << "\t\t\tPhone Number: " << emp.phone_number << "\n";
+                cout << "\t\t\tEmail: " << emp.email << "\n";
+                cout << "\t\t\tEmployment History: " << emp.employment_history << "\n";
+                cout << "\t\t\tQualifications: " << emp.qualifications << "\n";
+                cout << "\t\t\tExperience: " << emp.experience << "\n";
+                cout << "\t\t\tCourse: " << emp.course << "\n";
+                cout << "\t\t\tRoles: " << emp.roles << "\n";
+                cout << "\t\t\tWorking Hours: " << emp.working_hours << "\n";
+                found++;
+            }
+        }
+
+        if (found == 0) {
+            cout << "\n\t\t\t Employee ID Not Found....";
+        }
+
+        file.close();
+    }
+}
+
+void delete_employee(Employee emp)
     {
         int ID, count = 0;
     cout << "DELETE TEACHER" << endl;
     cout << "Enter Teacher's ID you want to delete: ";
     cin >> ID;
-    employee teacher;
 
-    File.open("teachers.txt", ios::in);
+    fstream File;
+    File.open("employeeRecord.txt", ios::in);
     ofstream tempfile;
     tempfile.open("temporary.txt", ios::out);
 
-    while (
-           File >> teacher.employee_ID >> teacher.Fname >> teacher.Lname >> teacher.age >> teacher.gender >> teacher.phone_number >> teacher.email >> teacher.experience >> teacher.employment_history >> teacher.qualifications >> teacher.course >> teacher.roles)
-    {
-        if (teacher.employee_ID != ID) {
-            tempfile << teacher.employee_ID << " " << teacher.Fname << " " << teacher.Lname << " " << teacher.age << " " << teacher.gender << " " << teacher.phone_number << " " << teacher.email << " " << teacher.experience << " " << teacher.employment_history << " " << teacher.qualifications << " " << teacher.course << " " << teacher.roles << endl;
-
-        }else
+   while (File >> emp.employee_ID >> emp.Fname >> emp.Lname >> emp.age >> emp.gender >> emp.phone_number >> emp.email >> emp.experience >> emp.employment_history >> emp.qualifications >> emp.course >> emp.roles) {
+    if (emp.employee_ID != ID) {
+        tempfile << emp.employee_ID << " " << emp.Fname << " " << emp.Lname << " " << emp.age << " " << emp.gender << " " << emp.phone_number << " " << emp.email << " " << emp.experience << " " << emp.employment_history << " " << emp.qualifications << " " << emp.course << " " << emp.roles << endl;
+    } else {
         count++;
     }
 
     File.close();
     tempfile.close();
-    remove("teachers.txt");
-    rename("temporary.txt", "teachers.txt");
+    remove("employeeRecord.txt");
+    rename("temporary.txt", "employeeRecord.txt");
 
     if (count == 0) {
        cout << "Employee record not found!" << endl;
@@ -234,89 +253,176 @@ void search_teacher(fstream& File) {
     } else
         cout << "Employee record deleted successfully!" << endl;
 }
-
-//Displaying all Employees Data
-void display_all_employees(fstream& File){
-    int count=0;
-    employee teacher;
-    employee teachers[10];
-    File.open("teachers.txt",ios::in);
-    if (File.is_open())
-        cout<<"**.\n";
-    else
-        cout<<"Unable to open a file.";
-    cout<<"-----------------------------------------------------------------------------------------------------------------------------\n";
-    cout<<"EMPID"<<"\t\tFIRST-NAME"<<"\t\tLAST-NAME"<<"\t\tAGE"<<"\t\tGENDER"<<"\t\tSALARY"<<"\t\tEXPERIENCE  ";
-    cout<<"\n-----------------------------------------------------------------------------------------------------------------------------\n";
-    File.seekg(0,ios::beg);
-    File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>>teacher.gender>>teacher.phone_number>>teacher.email>>teacher.employment_history>>teacher.qualifications>>teacher.experience>>teacher.course>>teacher.roles;
-    while(!File.eof())
-        {
-        teachers[count]=teacher;
-        File.clear();
-        count++;
-        File>>teacher.employee_ID>>teacher.Fname>>teacher.Lname>>teacher.age>>teacher.gender>>teacher.phone_number>>teacher.email>>teacher.employment_history>>teacher.qualifications
-        >>teacher.experience>>teacher.course>>teacher.roles;
-
-        }
-    for(int i=0;i<count;i++)
-    {
-        cout<<teachers[i].employee_ID<<setw(15)<<"\t"<<teachers[i].Fname<<setw(15)<<"\t"<<teachers[i].Lname<<setw(13)<<"\t"<<teachers[i].age<<setw(13)<<"\t"<<teachers[i].gender<<setw(13)<<"\t";
-        cout<<teachers[i].phone_number<<setw(11)<<"\t"<<teachers[i].email<<"\t"<<teachers[i].employment_history<<"\t"<<teachers[i].qualifications<<"\t"<<teachers[i].experience<<"\t"<<teachers[i].course<<"\t"<<teachers[i].roles;
-        cout<<"\n-----------------------------------------------------------------------------------------------------------------------------";
-        cout<<endl;
     }
-    File.close();
+//Deleting Employee Data Function
+
+void Employee_delete(Employee emp) {
+system("cls");
+    fstream file, file1;
+    int found = false;
+    int id;
+
+    cout << "\n-------------------------------------------------------------------------------------------------------" << endl;
+    cout << "------------------------------------- Delete Employee Details ------------------------------------------" << endl;
+
+    file.open("teachers.txt", ios::in);
+
+    if (!file) {
+        cout << "\n\t\t\tNo Data is Present..";
+        file.close();
+    } else {
+        cout << "\nEnter Employee ID of Employee whose data you want to Delete: ";
+        cin >> id;
+
+        file1.open("record.txt", ios::app | ios::out);
+
+        while (file >> emp.employee_ID >> emp.Fname >> emp.Lname >> emp.age >> emp.gender >> emp.phone_number >> emp.email >> emp.employment_history >> emp.qualifications
+               >> emp.experience >> emp.course >> emp.roles >> emp.working_hours) {
+            if (id != emp.employee_ID) {
+                file1 << " " << emp.employee_ID << " " << emp.Fname << " " << emp.Lname << " " << emp.age << " " << emp.gender << " " << emp.phone_number
+                    << " " << emp.email << " " << emp.employment_history << " " << emp.qualifications << " " << emp.experience << " " << emp.course << " "
+                    << emp.roles << " " << emp.working_hours << "\n";
+            } else {
+                found = true;;
+                cout << "\n\t\t\tSuccessfully Delete Data";
+            }
+        }
+
+        if (!found) {
+            cout << "\n\t\t\t Employee ID Not Found....";
+        }
+
+        file1.close();
+        file.close();
+
+        remove("employeeRecord.txt");
+        rename("record.txt", "employeeRecord.txt");
+    }
 }
 
-//Calculating Employee Data
-double calculate_salary(employee teacher ,fstream& File) {
-
-int ID;
-cout<<"Enter the employee ID :";
-    cin>>ID;
+double calculate_salary(Employee &emp) {
+    int ID;
+    cout << "Enter the employee ID: ";
+    cin >> ID;
     int hoursWorked;
     int weeklyHours;
-    cout << "Enter working hours weekly : ";
-    cin>>weeklyHours;
-    teacher.working_hours = 4* weeklyHours;
-    int totalworked;
-    for(int i=0; i<4; i++){
-        cout<<"How many hours did you work in week "<<i+1<<" ?";
-        cin>>hoursWorked;
-        totalworked += hoursWorked;
+    cout << "Enter working hours weekly: ";
+    cin >> weeklyHours;
+    emp.working_hours = 4 * weeklyHours;
+    int totalWorked = 0; // Initialize totalWorked to 0
+
+    for (int i = 0; i < 4; i++) {
+        cout << "How many hours did you work in week " << i + 1 << "? ";
+        cin >> hoursWorked;
+        totalWorked += hoursWorked; // Accumulate total worked hours
     }
-             double paymentPerHour = 500.0;
-  double salary = paymentPerHour * totalworked;
-  cout<<"The salary of "<< teacher.Fname << " "<< teacher.Lname<<" is: "<<salary<<" birr";
-       return 0;
-       }
 
-    //Evaluating Performance of employees based on worked hours
-void evaluate_performance(employee teacher, fstream& File) {
-int ID;
-cout<<"Enter the employee ID :";
-    cin>>ID;
+    double paymentPerHour = 500.0;
+    double salary = paymentPerHour * totalWorked;
+    cout << "The salary of " << emp.Fname << " " << emp.Lname << " is: " << salary << " birr" << endl;
+    return salary; // Return the calculated salary
+}
+
+void evaluate_performance(Employee &emp) {
+    int ID;
+    cout << "Enter the employee ID: ";
+    cin >> ID;
     int hoursWorked;
     int weeklyHours;
-    cout << "Enter working hours weekly : ";
-    cin>>weeklyHours;
-    teacher.working_hours = 4* weeklyHours;
-    int totalworked;
-    for(int i=0; i<4; i++){
-        cout<<"How many hours did you work in week "<<i+1<<" ?";
-        cin>>hoursWorked;
-        totalworked += hoursWorked;}
-            if (totalworked == teacher.working_hours) {
+    cout << "Enter working hours weekly: ";
+    cin >> weeklyHours;
+    emp.working_hours = 4 * weeklyHours;
+    int totalWorked = 0; // Initialize totalWorked to 0
+
+    for (int i = 0; i < 4; i++) {
+        cout << "How many hours did you work in week " << i + 1 << "? ";
+        cin >> hoursWorked;
+        totalWorked += hoursWorked; // Accumulate total worked hours
+    }
+
+    if (totalWorked == emp.working_hours) {
         cout << "Excellent performance\n";
-    } else if (totalworked >= (0.75 * teacher.working_hours)) {
+    } else if (totalWorked >= (0.75 * emp.working_hours)) {
         cout << "Good performance\n";
-    } else if (totalworked >= (0.50 * teacher.working_hours)) {
+    } else if (totalWorked >= (0.50 * emp.working_hours)) {
         cout << "Bad performance\n";
-    } else if (totalworked >= 0) {
+    } else if (totalWorked >= 0) {
         cout << "Very bad performance\n";
     } else {
         cout << "Invalid input\n";
     }
 }
 
+
+void menu() {
+    int choice;
+
+    do {
+        char x;
+        system("cls");
+        cout << "\t\t\t 1. Enter New Employee Record" << endl;
+        cout << "\t\t\t 2. Display Employee Records" << endl;
+        cout << "\t\t\t 3. Update Employee Record" << endl;
+        cout << "\t\t\t 4. Search Employee Record" << endl;
+         cout << "\t\t\t 5. calculate Employee Record" << endl;
+         cout << "\t\t\t 6. evaluation Employee Record" << endl;
+        cout << "\t\t\t 8. Exit" << endl;
+        cout << "\n Enter Your Choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                do {
+                    Employee emp;
+                    employee_insert(emp);
+                    cout << "Do you want to add another employee record? (y/n): ";
+                    cin >> x;
+                } while (x == 'y' || x == 'Y');
+                break;
+            case 2:
+                {
+                    Employee emp;
+                    employee_display(emp);
+                    break;
+                }
+            case 3:
+                {
+                    Employee emp;
+                    employee_modify(emp);
+                    break;
+                }
+            case 4:
+                {
+                    Employee emp;
+                    employee_search(emp);
+                    break;
+                }
+
+            case 5:
+                {
+                    Employee emp;
+                    calculate_salary(emp);
+                    break;
+                }
+            case 6:
+                {
+                   Employee emp;
+                   evaluate_performance(emp);
+                   break;
+                }
+            case 8:
+                cout << "\n\t\t\t Program Is Exiting..." << endl;
+                exit(0);
+                break;
+            default:
+                cout << "\n\t\t\t Invalid Choice... Please Try Again..." << endl;
+        }
+
+        getch();
+    } while (choice != 0);
+}
+
+int main() {
+    menu();
+    return 0;
+}
